@@ -2,20 +2,38 @@
 
 [![Build Status](https://travis-ci.com/Knight1/cloudflared.svg?branch=master)](https://travis-ci.com/Knight1/cloudflared)
 
-a docker container which runs the [cloudflared](https://developers.cloudflare.com/1.1.1.1/dns-over-https/cloudflared-proxy/) proxy-dns at port 54 based on alpine with some parameters to enable DNS over HTTPS proxy for [pi-hole](https://pi-hole.net/) based on tutorials from [Oliver Hough](https://oliverhough.cloud/blog/configure-pihole-with-dns-over-https/) and [Scott Helme](https://scotthelme.co.uk/securing-dns-across-all-of-my-devices-with-pihole-dns-over-https-1-1-1-1/)
+A docker container which runs the [cloudflared](https://developers.cloudflare.com/1.1.1.1/dns-over-https/cloudflared-proxy/) proxy-dns at port 54 based on alpine with some parameters to enable DNS over HTTPS proxy for [pi-hole](https://pi-hole.net/) based on tutorials from [Oliver Hough](https://oliverhough.cloud/blog/configure-pihole-with-dns-over-https/) and [Scott Helme](https://scotthelme.co.uk/securing-dns-across-all-of-my-devices-with-pihole-dns-over-https-1-1-1-1/)
 
-## run
+## Setup
 
-Port 54 on host network
+### Start with Port 54 (Default Port is 53!)
 
-```docker run --name cloudflared --rm --net host -restart=always:5 knight1/cloudflared```
+Port 54 on host network so every device on the network can reach the Proxy
 
-## Pi-Hole 
+```docker run -d --name cloudflared --restart=always:5 --net host knight/cloudflared-dns```
+
+### Start with Port 53
+
+You can set up this Host to be a normal DNS resolver you can put into every client like with 8.8.8.8 or inside your router.
+
+Examples: [Lifewire](https://www.lifewire.com/how-to-change-dns-servers-on-most-popular-routers-2617995), [The Verge](https://www.theverge.com/2018/4/3/17191538/how-to-change-dns-routers-windows-mac-ios)
+
+```docker run -d --name cloudflared --restart=always:5 -p 53:54/udp knight/cloudflared-dns```
+
+### Pi-hole®: (A black hole for Internet advertisements)
 
 Install Docker and [Pi-hole](https://hub.docker.com/r/diginc/pi-hole/)
 
-```docker run -d --name cloudflared -p 127.0.0.1:54:54 --restart=always:5 knight1/cloudflared```
+```docker run -d --name cloudflared -p 127.0.0.1:54:54/udp --restart=always:5 knight/cloudflared-dns```
 Enter IP 127.0.0.1#54 into Custom 1 (IPv4)
+
+## Build
+
+You can see the build and the push to [Docker Hub](https://hub.docker.com/r/knight/cloudflared-dns/) on [Travis-CI](https://travis-ci.com/Knight1/cloudflared)
+
+## Contribute
+
+Issues, Pull Requests and Wiki additions are welcome :)
 
 ## test
 
