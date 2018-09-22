@@ -16,8 +16,10 @@ before_install:
   - docker run --rm --privileged multiarch/qemu-user-static:register
 
 script:
-  - docker build -t visibilityspots/cloudflared:$TAG --build-arg ARCH="$ARCH" --build-arg GOARCH="$GOARCH" --build-arg GOARM="$GOARM" ./
-  - dgoss run --name cloudflared -ti visibilityspots/cloudflared:$TAG
+  - docker build -t knight/cloudflared-dns:$TAG --build-arg ARCH="$ARCH" --build-arg GOARCH="$GOARCH" --build-arg GOARM="$GOARM" ./
+  - dgoss run --name cloudflared -ti knight/cloudflared-dns:$TAG
 
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then docker login -u=visibilityspots -p="$DOCKER_PASSWORD"; docker push visibilityspots/cloudflared:$TAG; fi
+  if: branch = master
+  - echo "$DOCKER_PASSWORD" | docker login -u=knight --password-stdin
+  - docker push knight/cloudflared-dns:$TAG
