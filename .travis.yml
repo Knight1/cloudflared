@@ -20,6 +20,6 @@ script:
   - dgoss run --name cloudflared -ti knight/cloudflared-dns:$TAG
 
 after_success:
-  if: branch = master
+  - [[ "$TRAVIS_BRANCH" == "master" ]] || exit 0 
   - echo "$DOCKER_PASSWORD" | docker login -u=knight --password-stdin
   - docker push knight/cloudflared-dns:$TAG
