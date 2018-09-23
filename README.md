@@ -1,4 +1,4 @@
-# Cloudflared
+# Cloudflared DNS over HTTPS
 
 [![Build Status](https://travis-ci.com/Knight1/cloudflared.svg?branch=master)](https://travis-ci.com/Knight1/cloudflared)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/672bd95d12da4f28a16190bfba379711)](https://www.codacy.com/app/Knight1/cloudflared) 
@@ -9,7 +9,7 @@
 
 A docker container which runs the [cloudflared](https://developers.cloudflare.com/1.1.1.1/dns-over-https/cloudflared-proxy/) proxy-dns at port 54 based on alpine with some parameters to enable DNS over HTTPS proxy for [pi-hole](https://pi-hole.net/) based on tutorials from [Oliver Hough](https://oliverhough.cloud/blog/configure-pihole-with-dns-over-https/) and [Scott Helme](https://scotthelme.co.uk/securing-dns-across-all-of-my-devices-with-pihole-dns-over-https-1-1-1-1/)
 
-## Setup
+## Getting Started
 
 Replace ```amd64``` with ```arm64``` or ```arm``` for RaspberryPi etc.
 
@@ -39,7 +39,7 @@ Enter IP 127.0.0.1#54 into Custom 1 (IPv4) within the Pi-Hole Admin Page
 
 You can see the build and the push to [Docker Hub](https://hub.docker.com/r/knight/cloudflared-dns/) on [Travis-CI](https://travis-ci.com/Knight1/cloudflared)
 
-## Contribute
+## You want to contribute? [![Awesome Badges](https://img.shields.io/badge/badges-awesome-green.svg)](https://github.com/Naereen/badges)
 
 Issues, Pull Requests and Wiki additions are welcome :)
 
@@ -64,5 +64,5 @@ Count: 4, Failed: 0, Skipped: 0
 INFO: Deleting container
 ```
 
-## License
+## License 📜
 Distributed under the MIT license
