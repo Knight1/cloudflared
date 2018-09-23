@@ -20,7 +20,7 @@ script:
   - dgoss run --name cloudflared -ti knight/cloudflared-dns:$TAG
 
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" && "TRAVIS_BUILD_STAGE_NAME" == "Test"]; then docker push knight/cloudflared-dns:$TAG; fi
+  - if [[ "$TRAVIS_BRANCH" == "master" && "TRAVIS_BUILD_STAGE_NAME" == "Test" ]]; then docker push knight/cloudflared-dns:$TAG; fi
 
 jobs:
   include:
