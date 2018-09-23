@@ -13,11 +13,11 @@ before_install:
   - curl -L https://goss.rocks/install | sudo sh
   - sudo apt-get -y install qemu-user-static
   - docker run --rm --privileged multiarch/qemu-user-static:register
+  - echo "$DOCKER_PASSWORD" | docker login -u=knight --password-stdin
 
 script:
   - docker build -t knight/cloudflared-dns:$TAG --build-arg ARCH="$ARCH" --build-arg GOARCH="$GOARCH" --build-arg GOARM="$GOARM" ./
   - dgoss run --name cloudflared -ti knight/cloudflared-dns:$TAG
-  - echo "$DOCKER_PASSWORD" | docker login -u=knight --password-stdin
 
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" && "TRAVIS_BUILD_STAGE_NAME" == "Test"]; then docker push knight/cloudflared-dns:$TAG; fi
