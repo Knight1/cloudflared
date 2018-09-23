@@ -29,5 +29,5 @@ jobs:
         - sleep 10 && echo Deploy
         - wget https://github.com/estesp/manifest-tool/releases/download/v0.7.0/manifest-tool-linux-amd64
         - chmod +x manifest-tool-linux-amd64
-        - ./manifest-tool-linux-amd64 push from-args --platforms linux/amd64,linux/arm,linux/arm64 --template knight/cloudflared-dns:amd64 --target knight/cloudflared-dns:latest
+        - if [[ "$TRAVIS_BRANCH" == "master" ]]; then./manifest-tool-linux-amd64 push from-args --platforms linux/amd64,linux/arm,linux/arm64 --template knight/cloudflared-dns:amd64 --target knight/cloudflared-dns:latest; fi
       env: TAG=amd64
