@@ -4,12 +4,10 @@ services:
 - docker
 
 env:
-  global:
-    secure: Or5wtPms5rI3oMEGSuzcbA5bYB6yTCnKslihKsjFyldkVBrEz0htBDUZto78HxWblMjHypR1YRCxhoToFKI1a0Q5HvnD7gbrDgJDxZmXN0LpHxS3hubMYfYc6V/DALYY29u2Foq4aoBsBMKC22fwBODFkzwtaIY/KRYxP2LDQHfBYZBMxd6eBIu8jG5UhuCVgU2gz7/0XaIouoHCBNqacf8dgv+635IjyEZATGhuAJ6TOFtaXwyf588xc5jFCoKlo2c3cCu9dHtzAsrG9kk5mgFmZkxpQkuQVTb8n8I6bekuaW0Si6xFSLRRZcbEo8aUPF6PmHT42RcXj/R56HlyYJxX32+ZVSTaftrQ0330KPIzSG8WFDvt0rCa0PUKJvWd1UcB+8ZRCVCxZse1p0IlaeYDZu9D0EvyZowY1nemFuFTU52g2tWYtLoQVGJ43fATBUNxunulg0/i55ZzHDFlE4XS1P2Scsoqp42UVbdCieotT7rhNJwL1jdxgEJfh958wpFVnoC5RTl6w5tuFe/cM+X7TsDT6EuyrMr0hMgW5cLfJ3Q4meYA0LE2GSyELxNRWGUdwCA4h4tyeCigdRHXb1UXnh969O0ehI4N3ADy9ssO2TkvyfkajCVh+6hPXC8OFPO/uPyjc1zCpaGVvtJS2hMOdyJ9obm8JiskeCGP8t8=
   matrix:
     - ARCH=amd64 GOARCH=amd64 GOARM=6 QQEMU_ARCH=x86_64 TAG=amd64
     - ARCH=armhf GOARCH=arm   GOARM=6 QEMU_ARCH=arm     TAG=arm
-    - ARCH=arm64 GOARCH=arm64   GOARM=6 QEMU_ARCH=arm64     TAG=arm64
+    - ARCH=arm64 GOARCH=arm64 GOARM=6 QEMU_ARCH=arm64   TAG=arm64
 
 before_install:
   - curl -L https://goss.rocks/install | sudo sh
@@ -22,3 +20,12 @@ script:
 
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then echo "$DOCKER_PASSWORD" | docker login -u=knight --password-stdin; docker push knight/cloudflared-dns:$TAG; fi
+
+jobs:
+  include:
+    - stage: deploy
+      script: 
+        - sleep 10 && echo Deploy
+        - wget https://github.com/estesp/manifest-tool/releases/download/v0.7.0/manifest-tool-linux-amd64
+        - chmod +x manifest-tool-linux-amd64
+      env: TAG=amd64
