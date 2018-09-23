@@ -1,6 +1,11 @@
 # Cloudflared
 
 [![Build Status](https://travis-ci.com/Knight1/cloudflared.svg?branch=master)](https://travis-ci.com/Knight1/cloudflared)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/672bd95d12da4f28a16190bfba379711)](https://www.codacy.com/app/Knight1/cloudflared) 
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Docker Pulls](https://img.shields.io/docker/pulls/knight/cloudflared-dns.svg)](https://hub.docker.com/r/knight/cloudflared-dns)
+[![Contributions welcome](https://img.shields.io/badge/contributions-welcome-orange.svg)](https://github.com/Knight1/cloudflared/pulls)
+
 
 A docker container which runs the [cloudflared](https://developers.cloudflare.com/1.1.1.1/dns-over-https/cloudflared-proxy/) proxy-dns at port 54 based on alpine with some parameters to enable DNS over HTTPS proxy for [pi-hole](https://pi-hole.net/) based on tutorials from [Oliver Hough](https://oliverhough.cloud/blog/configure-pihole-with-dns-over-https/) and [Scott Helme](https://scotthelme.co.uk/securing-dns-across-all-of-my-devices-with-pihole-dns-over-https-1-1-1-1/)
 
@@ -24,7 +29,7 @@ Examples: [Lifewire](https://www.lifewire.com/how-to-change-dns-servers-on-most-
 
 ### Pi-hole®: (A black hole for Internet advertisements)
 
-Install Docker and [Pi-hole](https://hub.docker.com/r/diginc/pi-hole/)
+Install Docker ```curl install.docker.com | sudo bash``` and [Pi-hole](https://hub.docker.com/r/pihole/pihole/)
 
 ```docker run -d --name cloudflared -p 127.0.0.1:54:54/udp --restart=always knight/cloudflared-dns:amd64```
 
