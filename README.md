@@ -11,17 +11,21 @@ A docker container which runs the [cloudflared](https://developers.cloudflare.co
 
 ## Getting Started
 
-Replace ```amd64``` with ```arm64``` or ```arm``` for RaspberryPi etc.
+Replace ```amd64``` most normal PC's with ```arm64``` or ```arm``` for RaspberryPi, BananaPi etc.
 
-### Start with Port 54 (Default Port is 53!)
+### Start with Port 54 (Default Port is 53!) for testing purposes
 
 Port 54 on host network so every device on the network can reach the Proxy
 
-```docker run -d --name cloudflared --restart=always --net host knight/cloudflared-dns:amd64```
+```docker run -it --rm --name cloudflared --net host knight/cloudflared-dns:amd64```
 
-### Start with Port 53
+```dig example.com @IP_OF_HOST -p 54```
 
-You can set up this Host to be a normal DNS resolver you can put into every client like with 8.8.8.8 or inside your router.
+If you stop this container it will remove itself!
+
+### Start with Default Port 53
+
+You can set up this Host to be a normal DNS resolver. You can put the Host IP into every client like with 1.1.1.1 or 8.8.8.8 or inside your router so you do not need to do it manually.
 
 Examples: [Lifewire](https://www.lifewire.com/how-to-change-dns-servers-on-most-popular-routers-2617995), [The Verge](https://www.theverge.com/2018/4/3/17191538/how-to-change-dns-routers-windows-mac-ios)
 
@@ -37,13 +41,14 @@ Enter IP 127.0.0.1#54 into Custom 1 (IPv4) within the Pi-Hole Admin Page
 
 ## Build
 
-You can see the build and the push to [Docker Hub](https://hub.docker.com/r/knight/cloudflared-dns/) on [Travis-CI](https://travis-ci.com/Knight1/cloudflared)
+You can see the build, it's status and the push to [Docker Hub](https://hub.docker.com/r/knight/cloudflared-dns/) on [Travis-CI](https://travis-ci.com/Knight1/cloudflared)
+I run it every week so that there is no bug in it from the upstream apline image.
 
 ## You want to contribute? [![Awesome Badges](https://img.shields.io/badge/badges-awesome-green.svg)](https://github.com/Naereen/badges)
 
-Issues, Pull Requests and Wiki additions are welcome :)
+Issues, Pull Requests and Wiki additions are very welcome 😊
 
-## test
+## Test
 
 I wrote some tests in a goss.yaml file which can be executed by [dgoss](https://github.com/aelsabbahy/goss/tree/master/extras/dgoss)
 
@@ -65,4 +70,4 @@ INFO: Deleting container
 ```
 
 ## License 📜
-Distributed under the MIT license
+[MIT Licensed](https://lbesson.mit-license.org/) (file [LICENSE](LICENSE)).
