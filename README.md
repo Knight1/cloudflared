@@ -6,11 +6,13 @@ A docker container which runs the [cloudflared](https://developers.cloudflare.co
 
 ## Setup
 
+Replace ```amd64``` with ```arm64``` or ```arm``` for RaspberryPi etc.
+
 ### Start with Port 54 (Default Port is 53!)
 
 Port 54 on host network so every device on the network can reach the Proxy
 
-```docker run -d --name cloudflared --restart=always:5 --net host knight/cloudflared-dns```
+```docker run -d --name cloudflared --restart=always --net host knight/cloudflared-dns:amd64```
 
 ### Start with Port 53
 
@@ -18,14 +20,15 @@ You can set up this Host to be a normal DNS resolver you can put into every clie
 
 Examples: [Lifewire](https://www.lifewire.com/how-to-change-dns-servers-on-most-popular-routers-2617995), [The Verge](https://www.theverge.com/2018/4/3/17191538/how-to-change-dns-routers-windows-mac-ios)
 
-```docker run -d --name cloudflared --restart=always:5 -p 53:54/udp knight/cloudflared-dns```
+```docker run -d --name cloudflared --restart=always -p 53:54/udp knight/cloudflared-dns:amd64```
 
 ### Pi-hole®: (A black hole for Internet advertisements)
 
 Install Docker and [Pi-hole](https://hub.docker.com/r/diginc/pi-hole/)
 
-```docker run -d --name cloudflared -p 127.0.0.1:54:54/udp --restart=always:5 knight/cloudflared-dns```
-Enter IP 127.0.0.1#54 into Custom 1 (IPv4)
+```docker run -d --name cloudflared -p 127.0.0.1:54:54/udp --restart=always knight/cloudflared-dns:amd64```
+
+Enter IP 127.0.0.1#54 into Custom 1 (IPv4) within the Pi-Hole Admin Page
 
 ## Build
 
