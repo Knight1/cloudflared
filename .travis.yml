@@ -21,6 +21,7 @@ script:
 
 after_success:
   - if [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_BUILD_STAGE_NAME" == "Test" ]]; then docker push knight/cloudflared-dns:$TAG; fi
+  - bash < (curl -s https://codecov.io/bash)
 
 jobs:
   include:
