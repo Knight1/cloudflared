@@ -50,23 +50,75 @@ Issues, Pull Requests and Wiki additions are very welcome 😊
 
 ## Test
 
-I wrote some tests in a goss.yaml file which can be executed by [dgoss](https://github.com/aelsabbahy/goss/tree/master/extras/dgoss)
+```
+$ dig +short @10.0.0.2 -p 5054 visibilityspots.org
+13.225.238.129
+13.225.238.53
+13.225.238.9
+13.225.238.61
+```
+
+## build
+
+Build against pinned upstream release
+```
+$ docker build -t visibilityspots/cloudflared:latest .
+```
+
+Build against a specific upstream release
+```
+$ docker build -t visibilityspots/cloudflared:latest . --build-arg UPSTREAM_RELEASE_TAG=2021.5.10
+```
+
+### buildx
+
+```
+$ docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+$ docker buildx build -t visibilityspots/cloudflared:latest --platform linux/amd64,linux/arm/v6,linux/arm/v7 --push .
+```
+
+### dgoss
+
+I wrote some tests in a goss.yaml file which can be executed by [dgoss](https://github.com/aelsabbahy/goss/tree/master/extras/dgoss) to test the created image
 
 ```
 $ dgoss run --name cloudflared --rm -ti knight1/cloudflared:latest
 INFO: Starting docker container
-INFO: Container ID: e5bd35d3
+INFO: Container ID: 792bc39d
 INFO: Sleeping for 0.2
+INFO: Container health
 INFO: Running Tests
-Process: cloudflared: running: matches expectation: [true]
-Package: ca-certificates: installed: matches expectation: [true]
-Command: cloudflared --version | head -1: exit-status: matches expectation: [0]
-Command: cloudflared --version | head -1: stdout: matches expectation: [cloudflared version DEV (built unknown)]
+User: cloudflared: exists: matches expectation: true
+Process: cloudflared: running: matches expectation: true
+Command: uname -a: exit-status: matches expectation: 0
+Command: cloudflared --version: exit-status: matches expectation: 0
+Command: cloudflared --version: stdout: matches expectation: ["cloudflared version 2023.8.2 (built September 2023)"]
+Package: ca-certificates: installed: matches expectation: true
+DNS: visibilityspots.org: resolvable: matches expectation: true
 
 
-Total Duration: 0.028s
-Count: 4, Failed: 0, Skipped: 0
+Total Duration: 0.092s
+Count: 7, Failed: 0, Skipped: 0
 INFO: Deleting container
+```
+
+### act
+
+using [act](https://github.com/nektos/act#overview----) for local testing of the written github actions makes my life and commit history a lot easier;
+
+```
+$ act -l
+Stage  Job ID  Job name  Workflow name  Workflow file  Events
+0      test    test      CI             main.yaml      push
+1      buildx  buildx    CI             main.yaml      push
+
+$ act -j test
+[CI/test] 🚀  Start image=catthehacker/ubuntu:act-latest
+.
+.
+.
+[CI/test]   ✅  Success - Main Execute Goss tests
+[CI/test] 🏁  Job succeeded
 ```
 
 ## License 📜

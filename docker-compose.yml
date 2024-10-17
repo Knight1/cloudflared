@@ -1,0 +1,25 @@
+---
+version: "2"
+
+services:
+  cloudflared:
+    image: visibilityspots/cloudflared
+    container_name: cloudflared
+    ports:
+      - "5054:5054/tcp"
+      - "5054:5054/udp"
+    environment:
+        TZ: ${TIMEZONE}
+        PORT: 5054
+        ADDRESS: 0.0.0.0
+    restart: always
+    networks:
+      cloudflared_net:
+        ipv4_address: 10.0.0.2
+
+networks:
+  cloudflared_net:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.0.0.0/29

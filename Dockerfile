@@ -1,22 +1,46 @@
-ARG ARCH
-FROM golang:alpine as gobuild
+ARG GOLANG_VERSION=1.23.2
+ARG ALPINE_VERSION=3.20
+ARG UPSTREAM_RELEASE_TAG=2024.10.0
 
-ARG GOARCH
-ARG GOARM
+FROM golang:${GOLANG_VERSION}-alpine${ALPINE_VERSION} AS gobuild
+ARG GOLANG_VERSION
+ARG ALPINE_VERSION
+ARG UPSTREAM_RELEASE_TAG
 
-RUN apk update && \
-	apk add git gcc build-base &&\ 
-	go get -v github.com/cloudflare/cloudflared/cmd/cloudflared
-WORKDIR /go/src/github.com/cloudflare/cloudflared/cmd/cloudflared
-RUN GOARCH=${GOARCH} GOARM=${GOARM} go build ./
+WORKDIR /tmp
 
-FROM multiarch/alpine:${ARCH}-edge
+RUN apk add --no-cache gcc build-base curl tar && \
+    mkdir release && \
+    curl -L "https://github.com/cloudflare/cloudflared/archive/refs/tags/${UPSTREAM_RELEASE_TAG}.tar.gz" | tar xvz --strip 1 -C ./release
 
-LABEL maintainer="Tobias Sachs"
+WORKDIR /tmp/release/cmd/cloudflared
 
-RUN apk add --no-cache ca-certificates; \
-        rm -rf /var/cache/apk/*;
+RUN go build -ldflags="-X 'main.Version=$UPSTREAM_RELEASE_TAG' -X 'main.BuildTime=$(date +%B\ %Y)'"
 
-COPY --from=gobuild /go/src/github.com/cloudflare/cloudflared/cmd/cloudflared/cloudflared /usr/local/bin/cloudflared
+FROM alpine:${ALPINE_VERSION}
 
-CMD ["/bin/sh", "-c", "/usr/local/bin/cloudflared proxy-dns --address 0.0.0.0 --port 54 --upstream https://1.1.1.1/dns-query --upstream https://1.0.0.1/dns-query"]
+ARG GOLANG_VERSION
+ARG ALPINE_VERSION
+
+LABEL maintainer="Jan Collijs"
+
+ENV UPSTREAM1=https://1.1.1.1/dns-query
+ENV UPSTREAM2=https://1.0.0.1/dns-query
+ENV PORT=5054
+ENV ADDRESS=0.0.0.0
+ENV METRICS=127.0.0.1:8080
+ENV MAX_UPSTREAM_CONNS=0
+
+RUN adduser -S cloudflared; \
+    apk add --no-cache ca-certificates bind-tools libcap tzdata; \
+    rm -rf /var/cache/apk/*;
+
+COPY --from=gobuild /tmp/release/cmd/cloudflared/cloudflared /usr/local/bin/cloudflared
+
+RUN setcap CAP_NET_BIND_SERVICE+eip /usr/local/bin/cloudflared
+
+HEALTHCHECK --interval=5s --timeout=3s --start-period=5s CMD nslookup -po=${PORT} cloudflare.com 127.0.0.1 || exit 1
+
+USER cloudflared
+
+CMD ["/bin/sh", "-c", "/usr/local/bin/cloudflared proxy-dns --address ${ADDRESS} --port ${PORT} --metrics ${METRICS} --upstream ${UPSTREAM1} --upstream ${UPSTREAM2} --max-upstream-conns ${MAX_UPSTREAM_CONNS}"]

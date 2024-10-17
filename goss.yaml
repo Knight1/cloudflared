@@ -2,8 +2,24 @@ package:
   ca-certificates:
     installed: true
 
+user:
+  cloudflared:
+    exists: true
+
+process:
+  cloudflared:
+    running: true
+
 command:
-  cloudflared --version | head -1:
+  uname -a:
+    exit-status: 0
+
+  cloudflared --version:
     exit-status: 0
     stdout:
-    - cloudflared version DEV (built unknown)
+    - cloudflared version 2024.10.0 (built October 2024)
+
+dns:
+  visibilityspots.org:
+    resolvable: true
+    server: 127.0.0.1:5054
