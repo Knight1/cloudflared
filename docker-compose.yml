@@ -3,14 +3,14 @@ version: "2"
 
 services:
   cloudflared:
-    image: visibilityspots/cloudflared
+    image: Knight1/cloudflared
     container_name: cloudflared
     ports:
-      - "5054:5054/tcp"
-      - "5054:5054/udp"
+      - "54:53/tcp"
+      - "54:53/udp"
     environment:
         TZ: ${TIMEZONE}
-        PORT: 5054
+        PORT: 54
         ADDRESS: 0.0.0.0
     restart: always
     networks:

@@ -1,7 +1,5 @@
 # Cloudflared DNS over HTTPS
 
-[![Build Status](https://travis-ci.com/Knight1/cloudflared.svg?branch=master)](https://travis-ci.com/Knight1/cloudflared)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/672bd95d12da4f28a16190bfba379711)](https://www.codacy.com/app/Knight1/cloudflared) 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Docker Pulls](https://img.shields.io/docker/pulls/knight/cloudflared-dns.svg)](https://hub.docker.com/r/knight/cloudflared-dns)
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-orange.svg)](https://github.com/Knight1/cloudflared/pulls)
@@ -51,7 +49,7 @@ Issues, Pull Requests and Wiki additions are very welcome 😊
 ## Test
 
 ```
-$ dig +short @10.0.0.2 -p 5054 visibilityspots.org
+$ dig +short @10.0.0.2 -p 54 tobiassachs.de
 13.225.238.129
 13.225.238.53
 13.225.238.9
@@ -62,19 +60,19 @@ $ dig +short @10.0.0.2 -p 5054 visibilityspots.org
 
 Build against pinned upstream release
 ```
-$ docker build -t visibilityspots/cloudflared:latest .
+$ docker build -t knight/cloudflared-dns:latest .
 ```
 
 Build against a specific upstream release
 ```
-$ docker build -t visibilityspots/cloudflared:latest . --build-arg UPSTREAM_RELEASE_TAG=2021.5.10
+$ docker build -t knight/cloudflared-dns:latest . --build-arg UPSTREAM_RELEASE_TAG=2021.5.10
 ```
 
 ### buildx
 
 ```
 $ docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-$ docker buildx build -t visibilityspots/cloudflared:latest --platform linux/amd64,linux/arm/v6,linux/arm/v7 --push .
+$ docker buildx build -t knight/cloudflared-dns:latest --platform linux/amd64,linux/arm/v6,linux/arm/v7 --push .
 ```
 
 ### dgoss
@@ -82,7 +80,7 @@ $ docker buildx build -t visibilityspots/cloudflared:latest --platform linux/amd
 I wrote some tests in a goss.yaml file which can be executed by [dgoss](https://github.com/aelsabbahy/goss/tree/master/extras/dgoss) to test the created image
 
 ```
-$ dgoss run --name cloudflared --rm -ti knight1/cloudflared:latest
+$ dgoss run --name cloudflared --rm -ti knight/cloudflared-dns:latest
 INFO: Starting docker container
 INFO: Container ID: 792bc39d
 INFO: Sleeping for 0.2

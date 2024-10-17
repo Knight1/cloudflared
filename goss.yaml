@@ -22,4 +22,4 @@ command:
 dns:
   visibilityspots.org:
     resolvable: true
-    server: 127.0.0.1:5054
+    server: 127.0.0.1:54
