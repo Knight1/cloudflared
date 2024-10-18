@@ -67,8 +67,12 @@ jobs:
             linux/386
             linux/riscv64
           push: true
+          sbom: true
+          provenance: mode=max
           tags: |
             knight/cloudflared-dns:latest
+            knight/cloudflared-dns:${{ date '+%Y%m%d' }}
             ghcr.io/knight1/cloudflared:latest
+            ghcr.io/knight1/cloudflared:${{ date '+%Y%m%d' }}
           cache-from: type=registry,ref=knight/cloudflared-dns:buildcache
           cache-to: type=registry,ref=knight/cloudflared-dns:buildcache,mode=max
