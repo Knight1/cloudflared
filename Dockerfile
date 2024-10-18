@@ -18,9 +18,7 @@ RUN apk add --no-cache gcc build-base curl tar go &&\
 WORKDIR /tmp/release/cmd/cloudflared
 
 RUN go build -ldflags="-X 'main.Version=$UPSTREAM_RELEASE_TAG' -X 'main.BuildTime=$(date +%B\ %Y)' -s -w" &&\
-    if ! command -v upx > /dev/null 2>&1; then \
-        upx --best cloudflared; \
-    fi
+    if ! command -v upx > /dev/null 2>&1; then upx --best cloudflared; fi
 
 FROM alpine:${ALPINE_VERSION}
 
