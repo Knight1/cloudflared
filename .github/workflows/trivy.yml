@@ -20,25 +20,25 @@ jobs:
 
       - name: Build an image from Dockerfile
         run: |
-          docker build -t visibilityspots/cloudflared:dev .
+          docker build -t knight/cloudflared-dev:dev .
 
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.24.0
+        uses: aquasecurity/trivy-action@0.28.0
         with:
-          image-ref: 'Knight1/cloudflared:dev'
+          image-ref: 'knight/cloudflared-dev:dev'
           format: 'table'
           exit-code: 0
           ignore-unfixed: true
-          severity: 'CRITICAL,HIGH'
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
 
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.24.0
+        uses: aquasecurity/trivy-action@0.28.0
         with:
-          image-ref: 'Knight1/cloudflared:dev'
+          image-ref: 'knight/cloudflared-dev:dev'
           format: 'sarif'
           output: 'trivy-results.sarif'
           ignore-unfixed: true
-          severity: 'CRITICAL,HIGH'
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
 
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3

@@ -3,14 +3,14 @@ version: "2"
 
 services:
   cloudflared:
-    image: Knight1/cloudflared
+    image: knight1/cloudflared-dns
     container_name: cloudflared
     ports:
       - "54:53/tcp"
       - "54:53/udp"
     environment:
         TZ: ${TIMEZONE}
-        PORT: 54
+        PORT: 53
         ADDRESS: 0.0.0.0
     restart: always
     networks:
