@@ -57,10 +57,21 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          platforms: linux/amd64,linux/arm64,linux/arm/v6,linux/arm/v7,linux/ppc64le,linux/s390x,linux/386,linux/riscv64,linux/mips64,linux/mips64le,linux/mips
+          platforms: |
+            linux/amd64
+            linux/arm64
+            linux/arm/v6
+            linux/arm/v7
+            linux/ppc64le
+            linux/s390x
+            linux/386
+            linux/riscv64
+            linux/mips64
+            linux/mips64le
+            linux/mips
           push: true
           tags: |
             knight/cloudflared-dns:latest
-            ghcr.io/Knight1/cloudflared:latest
+            ghcr.io/knight1/cloudflared:latest
           cache-from: type=registry,ref=knight/cloudflared-dns:buildcache
           cache-to: type=registry,ref=knight/cloudflared-dns:buildcache,mode=max
