@@ -23,6 +23,7 @@ ARG GOLANG_VERSION
 ARG ALPINE_VERSION
 
 LABEL maintainer="Jan Collijs & Knight1"
+LABEL org.opencontainers.image.source="https://github.com/Knight1/cloudflared"
 
 ENV UPSTREAM1=https://1.1.1.1/dns-query
 ENV UPSTREAM2=https://1.0.0.1/dns-query
