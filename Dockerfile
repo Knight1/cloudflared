@@ -7,13 +7,14 @@ ARG UPSTREAM_RELEASE_TAG
 
 WORKDIR /tmp
 
-RUN apk add --no-cache gcc build-base curl tar go && \
+RUN apk add --no-cache gcc build-base curl tar go upx && \
     mkdir release && \
     curl -L "https://github.com/cloudflare/cloudflared/archive/refs/tags/${UPSTREAM_RELEASE_TAG}.tar.gz" | tar xvz --strip 1 -C ./release
 
 WORKDIR /tmp/release/cmd/cloudflared
 
-RUN go build -ldflags="-X 'main.Version=$UPSTREAM_RELEASE_TAG' -X 'main.BuildTime=$(date +%B\ %Y)' -s -w"
+RUN go build -ldflags="-X 'main.Version=$UPSTREAM_RELEASE_TAG' -X 'main.BuildTime=$(date +%B\ %Y)' -s -w" &&\
+    upx --best cloudflared
 
 FROM alpine:${ALPINE_VERSION}
 
