@@ -66,9 +66,6 @@ jobs:
             linux/s390x
             linux/386
             linux/riscv64
-            linux/mips64
-            linux/mips64le
-            linux/mips
           push: true
           tags: |
             knight/cloudflared-dns:latest
