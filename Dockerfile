@@ -7,14 +7,15 @@ ARG UPSTREAM_RELEASE_TAG
 
 WORKDIR /tmp
 
-RUN apk add --no-cache gcc build-base curl tar go upx && \
-    mkdir release && \
+RUN apk add --no-cache gcc build-base curl tar go &&\
+    if [ "$(uname -m)" != "riscv64" ]; then apk add --no-cache upx; fi &&\
+    mkdir release &&\
     curl -L "https://github.com/cloudflare/cloudflared/archive/refs/tags/${UPSTREAM_RELEASE_TAG}.tar.gz" | tar xvz --strip 1 -C ./release
 
 WORKDIR /tmp/release/cmd/cloudflared
 
 RUN go build -ldflags="-X 'main.Version=$UPSTREAM_RELEASE_TAG' -X 'main.BuildTime=$(date +%B\ %Y)' -s -w" &&\
-    upx --best cloudflared
+    if [ "$(uname -m)" != "riscv64" ]; then upx --best cloudflared; fi
 
 FROM alpine:${ALPINE_VERSION}
 
