@@ -1,5 +1,5 @@
 ARG ALPINE_VERSION=3.20
-ARG UPSTREAM_RELEASE_TAG=2024.10.0
+ARG UPSTREAM_RELEASE_TAG=2024.10.1
 
 FROM alpine:${ALPINE_VERSION} AS gobuild
 ARG ALPINE_VERSION
@@ -8,14 +8,12 @@ ARG UPSTREAM_RELEASE_TAG
 WORKDIR /tmp
 
 RUN apk add --no-cache gcc build-base curl tar go &&\
-    if [ "$(uname -m)" != "riscv64" ]; then apk add --no-cache upx; fi &&\
     mkdir release &&\
     curl -L "https://github.com/cloudflare/cloudflared/archive/refs/tags/${UPSTREAM_RELEASE_TAG}.tar.gz" | tar xvz --strip 1 -C ./release
 
 WORKDIR /tmp/release/cmd/cloudflared
 
-RUN go build -ldflags="-X 'main.Version=$UPSTREAM_RELEASE_TAG' -X 'main.BuildTime=$(date +%B\ %Y)' -s -w" &&\
-    if [ "$(uname -m)" != "riscv64" ]; then upx --best cloudflared; fi
+RUN go build -ldflags="-X 'main.Version=$UPSTREAM_RELEASE_TAG' -X 'main.BuildTime=$(date +%B\ %Y)' -s -w"
 
 FROM alpine:${ALPINE_VERSION}
 
